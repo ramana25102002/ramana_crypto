@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #5c4caf;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        td:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-back {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4c51af;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn-back:hover {
+            background-color: #4645a0;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 8px;
+            margin: 10px auto;
+            display: block;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+    </style>
+    <script>
+        function filterTable(input, columnIndex) {
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("transactionTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) { // Start at 1 to skip the header row
+                const cell = rows[i].getElementsByTagName("td")[columnIndex];
+                if (cell) {
+                    const cellText = cell.textContent || cell.innerText;
+                    rows[i].style.display = cellText.toLowerCase().includes(filter) ? "" : "none";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Transaction History</h1>
+
+    {% if transactions %}
+        <table id="transactionTable">
+            <thead>
+                <tr>
+                    <th>
+                        Transaction ID<br>
+                        <input type="text" placeholder="Filter by ID" onkeyup="filterTable(this, 0)">
+                    </th>
+                    <th>
+                        Recipient Email<br>
+                        <input type="text" placeholder="Filter by Recipient" onkeyup="filterTable(this, 1)">
+                    </th>
+                    <th>
+                        Sender Email<br>
+                        <input type="text" placeholder="Filter by Sender" onkeyup="filterTable(this, 2)">
+                    </th>
+                    <th>
+                        Crypto Type<br>
+                        <input type="text" placeholder="Filter by Crypto" onkeyup="filterTable(this, 3)">
+                    </th>
+                    <th>
+                        Amount<br>
+                        <input type="text" placeholder="Filter by Amount" onkeyup="filterTable(this, 4)">
+                    </th>
+                    <th>
+                        Transaction Time<br>
+                        <input type="text" placeholder="Filter by Time" onkeyup="filterTable(this, 5)">
+                    </th>
+                    <th>
+                        Status<br>
+                        <input type="text" placeholder="Filter by Status" onkeyup="filterTable(this, 6)">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.recipient_email }}</td>
+                    <td>{{ transaction.sender_email }}</td>
+                    <td>{{ transaction.crypto_type }}</td>
+                    <td>${{ '{:,.2f}'.format(transaction.amount) }}</td>
+                    <td>{{ transaction.transaction_time }}</td>
+                    <td>{{ transaction.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}" class="btn-back">Back to Dashboard</a>
+</body>
+</html>
