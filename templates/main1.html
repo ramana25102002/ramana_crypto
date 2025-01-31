@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/crypto_acc.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/crypto_logo.jpg') }}">
+    <title>Crypto Wallet</title>
+</head>
+<body>
+    <h1>Welcome to Crypto Wallet</h1>
+    <div class="container">
+        <img src="{{ url_for('static', filename='img/crypto_logo.jpg') }}" alt="My Image">
+        <button class="btn" onclick="location.href='/signup'">Create New Crypto Account?</button>
+        <button class="btn" onclick="location.href='/login'">I Already Have an Account </button>
+    </div>
+    <script>
+        window.addEventListener('beforeunload', function(event) {
+            fetch('/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        });
+        </script>
+</body>
+</html>
