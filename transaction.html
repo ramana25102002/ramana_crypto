@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transaction.css') }}">
+    <script src="{{ url_for('static', filename='js/transaction.js') }}"></script>
+</head>
+<body>
+    <h1>Transaction History</h1>
+
+    {% if transactions %}
+        <table id="transactionTable">
+            <thead>
+                <tr>
+                    <th>
+                        Transaction ID<br>
+                        <input type="text" placeholder="Filter by ID" onkeyup="filterTable(this, 0)">
+                    </th>
+                    <th>
+                        Recipient Email<br>
+                        <input type="text" placeholder="Filter by Recipient" onkeyup="filterTable(this, 1)">
+                    </th>
+                    <th>
+                        Sender Email<br>
+                        <input type="text" placeholder="Filter by Sender" onkeyup="filterTable(this, 2)">
+                    </th>
+                    <th>
+                        Crypto Type<br>
+                        <input type="text" placeholder="Filter by Crypto" onkeyup="filterTable(this, 3)">
+                    </th>
+                    <th>
+                        Amount<br>
+                        <input type="text" placeholder="Filter by Amount" onkeyup="filterTable(this, 4)">
+                    </th>
+                    <th>
+                        Transaction Time<br>
+                        <input type="text" placeholder="Filter by Time" onkeyup="filterTable(this, 5)">
+                    </th>
+                    <th>
+                        Status<br>
+                        <input type="text" placeholder="Filter by Status" onkeyup="filterTable(this, 6)">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.recipient_email }}</td>
+                    <td>{{ transaction.sender_email }}</td>
+                    <td>{{ transaction.crypto_type }}</td>
+                    <td>${{ '{:,.2f}'.format(transaction.amount) }}</td>
+                    <td>{{ transaction.transaction_time }}</td>
+                    <td>{{ transaction.status }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard') }}" class="btn-back">Back to Dashboard</a>
+</body>
+</html>
